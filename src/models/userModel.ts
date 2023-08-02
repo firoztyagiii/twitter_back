@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema<IUser.UserDocument>({
   name: {
@@ -8,7 +9,12 @@ const userSchema = new mongoose.Schema<IUser.UserDocument>({
   email: {
     type: String,
     required: [true, "Email is required"],
-    unique: true,
+    // unique: true,
+  },
+  username: {
+    type: String,
+    required: [true, "Username is required"],
+    // unique: true,
   },
   password: {
     type: String,
@@ -18,9 +24,11 @@ const userSchema = new mongoose.Schema<IUser.UserDocument>({
   confirmPassword: {
     type: String,
     required: [true, "Confirm password is required"],
+    // TODO:
     // validate: {
-    //   validator: (v: string): boolean => {
-    //     return v === this.password;
+    //   validator: (v: string) => {
+    //     console.log(this.password);
+    //     // return v === this.password;
     //   },
     //   message: "Passwords do not match",
     // },
@@ -37,6 +45,14 @@ const userSchema = new mongoose.Schema<IUser.UserDocument>({
     type: String,
     default: "https://img.freepik.com/free-icon/user_318-159711.jpg?w=200",
   },
+});
+
+userSchema.pre<IUser.UserDocument>("save", async function (next) {
+  if (this.isModified("password") || this.isNew) {
+    this.password = await bcrypt.hash(this.password, 12);
+    this.confirmPassword = undefined;
+  }
+  next();
 });
 
 const UserModel = mongoose.model<IUser.UserDocument>("Users", userSchema);
