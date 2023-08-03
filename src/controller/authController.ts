@@ -11,7 +11,7 @@ const protect = async (req: Request, res: Response, next: NextFunction) => {
       token = req.cookies.token;
     }
     if (!token) {
-      next(new AppError("Token not found, you are not logged in", 401));
+      return next(new AppError("Token not found, you are not logged in", 401));
     }
     const payload = await verifyToken(token);
     res.locals = payload;

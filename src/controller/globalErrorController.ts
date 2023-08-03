@@ -12,7 +12,7 @@ const handleValidationError = (err: any, res: Response) => {
 };
 
 const globalError = (
-  err: Error,
+  err: any,
   req: Request,
   res: Response,
   next: NextFunction
@@ -20,8 +20,16 @@ const globalError = (
   if (err.name === "ValidationError") {
     return handleValidationError(err, res);
   }
+
+  if (err.isOperational) {
+    return res.status(err.code).json({
+      status: "fail",
+      message: err.message,
+    });
+  }
+
   // TODO: HANDLE DUPLICATE EMAIL AND USERNAME ERROR
-  // console.log("Error --->", err);
+  console.log(err);
   res.json(err);
 };
 

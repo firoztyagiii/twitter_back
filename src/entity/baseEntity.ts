@@ -14,8 +14,12 @@ class BaseEntity<T, D> {
   }
 
   async createOne(data: T): Promise<D> {
-    const doc = await this.model.create(data);
-    return doc as D;
+    try {
+      const doc = await this.model.create(data);
+      return doc as D;
+    } catch (err) {
+      throw err;
+    }
   }
 }
 
