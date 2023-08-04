@@ -25,6 +25,6 @@ const tweetSchema = new mongoose.Schema<ITweet.TweetDocument>({
   },
 });
 
-const TweetModel = mongoose.model<ITweet.TweetDocument>("tweets", tweetSchema);
+const TweetModel = mongoose.model<ITweet.TweetDocument>("Tweets", tweetSchema);
 
 export default TweetModel;

@@ -7,6 +7,7 @@ class TweetEntity<T, D> extends BaseEntity<T, D> {
   constructor(protected model: Model<D>) {
     super(model);
   }
+
   async find(
     filter: FilterQuery<D>,
     projection?: ProjectionType<D>,
@@ -36,7 +37,6 @@ class TweetEntity<T, D> extends BaseEntity<T, D> {
         email: false,
       },
     });
-    console.log(doc);
     if (!doc) return null;
     return doc;
   }
