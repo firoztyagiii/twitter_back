@@ -7,5 +7,6 @@ import * as authController from "../controller/authController";
 
 router.use(authController.protect);
 router.route("/:id").post(followingController.follow);
+router.route("/:id").post(followingController.unfollow);
 
 export default router;

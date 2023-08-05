@@ -47,11 +47,13 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 
     const token = await signToken(user);
 
-    res.cookie("token", token, {
-      expires: new Date(60 * 1000 * 60 * 60),
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "prod" ? true : false,
-    });
+    // res.cookie("token", token, {
+    //   expires: new Date(Date.now() + 100000),
+    //   httpOnly: false,
+    //   secure: false,
+    //   domain: "localhost:5173",
+    // });
+
     res.setHeader("Authorization", `Bearer ${token}`);
 
     res.status(200).json({

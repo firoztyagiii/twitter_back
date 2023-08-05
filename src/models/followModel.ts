@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const followingSchema = new mongoose.Schema<IFollower.FollowingDocument>({
+const followingSchema = new mongoose.Schema<IFollow.FollowDocument>({
   user: {
     type: Schema.Types.ObjectId,
     ref: "Users",
@@ -17,6 +17,9 @@ const followingSchema = new mongoose.Schema<IFollower.FollowingDocument>({
   },
 });
 
-const FollowingModel = mongoose.model("Followings", followingSchema);
+const FollowModel = mongoose.model<IFollow.FollowDocument>(
+  "Followings",
+  followingSchema
+);
 
-export default FollowingModel;
+export default FollowModel;
