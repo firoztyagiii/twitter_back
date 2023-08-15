@@ -47,12 +47,11 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
 
     const token = await signToken(user);
 
-    // res.cookie("token", token, {
-    //   expires: new Date(Date.now() + 100000),
-    //   httpOnly: false,
-    //   secure: false,
-    //   domain: "localhost:5173",
-    // });
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 1000 * 60 * 60),
+      httpOnly: true,
+      secure: false,
+    });
 
     res.setHeader("Authorization", `Bearer ${token}`);
 
@@ -84,7 +83,7 @@ const getUser = async (req: Request, res: Response, next: NextFunction) => {
         status: "success",
         data: { user },
       });
-    }, 2500);
+    }, 1500);
   } catch (err) {
     next(err);
   }

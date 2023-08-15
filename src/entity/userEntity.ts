@@ -1,7 +1,9 @@
-import { Model } from "mongoose";
+import mongoose, { Model } from "mongoose";
+import followEntity from "./followEntity";
 
 import UserModel from "../models/userModel";
 import BaseEntity from "./baseEntity";
+import AppError from "../utils/AppError";
 
 class UserEntity<T, D> extends BaseEntity<T, D> {
   constructor(protected model: Model<D>) {
@@ -17,6 +19,20 @@ class UserEntity<T, D> extends BaseEntity<T, D> {
         return null;
       }
       return user;
+    } catch (err) {
+      throw err;
+    }
+  }
+  async addFollowings(user: string, follow: string) {
+    try {
+      await this.model.findOneAndUpdate(
+        { _id: user },
+        { $inc: { followings: 1 } }
+      );
+      await this.model.findOneAndUpdate(
+        { _id: follow },
+        { $inc: { followers: 1 } }
+      );
     } catch (err) {
       throw err;
     }

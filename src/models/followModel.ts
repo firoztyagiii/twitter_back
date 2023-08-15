@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
+import userEntity from "../entity/userEntity";
 
-const followingSchema = new mongoose.Schema<IFollow.FollowDocument>({
+const followSchema = new mongoose.Schema<IFollow.FollowDocument>({
   user: {
     type: Schema.Types.ObjectId,
     ref: "Users",
@@ -17,9 +18,16 @@ const followingSchema = new mongoose.Schema<IFollow.FollowDocument>({
   },
 });
 
+followSchema.post<IFollow.FollowDocument>(
+  "save",
+  async function (doc: IFollow.FollowDocument) {
+    await userEntity.addFollowings(doc.user.toString(), doc.follow.toString());
+  }
+);
+
 const FollowModel = mongoose.model<IFollow.FollowDocument>(
   "Followings",
-  followingSchema
+  followSchema
 );
 
 export default FollowModel;

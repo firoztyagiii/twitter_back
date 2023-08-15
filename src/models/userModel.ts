@@ -45,6 +45,14 @@ const userSchema = new mongoose.Schema<IUser.UserDocument>({
     type: String,
     default: "https://img.freepik.com/free-icon/user_318-159711.jpg?w=200",
   },
+  followings: {
+    type: Number,
+    default: 0,
+  },
+  followers: {
+    type: Number,
+    default: 0,
+  },
 });
 
 userSchema.pre<IUser.UserDocument>("save", async function (next) {

@@ -15,4 +15,6 @@ export interface UserDocument extends User, Document {
   active: boolean;
   image: string;
   confirmPassword: string | undefined;
+  followings: number;
+  followers: number;
 }
