@@ -72,4 +72,22 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { signUp, login };
+const getUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { username } = req.params;
+    const user = await userEntity.findByUsername(username);
+    if (!user) {
+      return next(new AppError("Could not find the user", 404));
+    }
+    setTimeout(() => {
+      res.status(200).json({
+        status: "success",
+        data: { user },
+      });
+    }, 2500);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export { signUp, login, getUser };
