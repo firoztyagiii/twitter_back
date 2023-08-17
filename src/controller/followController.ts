@@ -15,8 +15,14 @@ const follow = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const unfollow = (req: Request, res: Response, next: NextFunction) => {
-  console.log(req.params);
+const unfollow = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const user = res.locals._id;
+    const { userTo } = req.params;
+    await followEntity.removeFollow();
+  } catch (err) {
+    next(err);
+  }
 };
 
 const getFollowers = async (

@@ -23,6 +23,14 @@ class FollowEntity<T, D> extends BaseEntity<T, D> {
     }
   }
 
+  async removeFollow() {
+    try {
+      await this.model.findOneAndDelete();
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async getFollowers(id: string, page: number) {
     try {
       const LIMIT = 10;
@@ -34,7 +42,9 @@ class FollowEntity<T, D> extends BaseEntity<T, D> {
       }
 
       const query = this.model.find({ follow: id });
-      query.skip(page - 1 * LIMIT);
+      if (page) {
+        query.skip(page - 1 * LIMIT);
+      }
       query.limit(LIMIT);
       return await query;
     } catch (err) {

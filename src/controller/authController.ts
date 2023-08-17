@@ -21,4 +21,13 @@ const protect = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { protect };
+const authorizeTo = (...roles: string[]) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    try {
+    } catch (err) {
+      next(err);
+    }
+  };
+};
+
+export { protect, authorizeTo };

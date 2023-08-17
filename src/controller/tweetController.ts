@@ -51,4 +51,11 @@ const getTweet = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { postTweet, getTweets, getTweet };
+const postAddLike = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+  } catch (err) {
+    next(err);
+  }
+};
+
+export { postTweet, getTweets, getTweet, postAddLike };
