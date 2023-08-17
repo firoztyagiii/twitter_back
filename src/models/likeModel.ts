@@ -8,7 +8,7 @@ const likeSchema = new mongoose.Schema<ILike.LikeDocument>({
     type: Number,
     default: Date.now(),
   },
-  user: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
   },
 });

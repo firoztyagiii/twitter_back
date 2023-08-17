@@ -21,6 +21,21 @@ class BaseEntity<T, D> {
       throw err;
     }
   }
+  async updateOne(
+    query: FilterQuery<T>,
+    updatePayload: { [key: string]: any },
+    options: QueryOptions<T> = {}
+  ): Promise<D | null> {
+    try {
+      const doc = await this.model.findOneAndUpdate(query, updatePayload, {
+        ...options,
+        new: true,
+      });
+      return doc;
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 export default BaseEntity;

@@ -40,6 +40,16 @@ class TweetEntity<T, D> extends BaseEntity<T, D> {
     if (!doc) return null;
     return doc;
   }
+  async addLike(tweetId: string) {
+    try {
+      const updatedTweet = await this.updateOne(
+        { tweetId },
+        { $inc: { like: 1 } }
+      );
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 const tweetEntity = new TweetEntity<ITweet.Tweet, ITweet.TweetDocument>(
