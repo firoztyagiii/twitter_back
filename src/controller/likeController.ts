@@ -4,8 +4,10 @@ import likeEntity from "../entity/likeEntity";
 const postAddLike = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = res.locals._id;
-    const { tweetId } = req.params;
-    const like = await likeEntity.addLike(tweetId, userId);
+    const like = await likeEntity.addLike(
+      req.body.tweetId || req.params.id,
+      userId
+    );
     res.status(201).json({
       status: "success",
       data: like,
@@ -15,4 +17,20 @@ const postAddLike = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { postAddLike };
+const postRemoveLike = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = res.locals._id;
+    await likeEntity.removeLike(req.body.tweetId || req.params.id, userId);
+    res.status(204).json({
+      status: "success",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export { postAddLike, postRemoveLike };

@@ -21,6 +21,7 @@ class BaseEntity<T, D> {
       throw err;
     }
   }
+
   async updateOne(
     query: FilterQuery<T>,
     updatePayload: { [key: string]: any },
@@ -32,6 +33,14 @@ class BaseEntity<T, D> {
         new: true,
       });
       return doc;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async deleteOne(query: FilterQuery<T>) {
+    try {
+      await this.model.findOneAndDelete(query);
     } catch (err) {
       throw err;
     }

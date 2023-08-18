@@ -42,10 +42,14 @@ class TweetEntity<T, D> extends BaseEntity<T, D> {
   }
   async addLike(tweetId: string) {
     try {
-      const updatedTweet = await this.updateOne(
-        { tweetId },
-        { $inc: { like: 1 } }
-      );
+      await this.updateOne({ tweetId }, { $inc: { like: 1 } });
+    } catch (err) {
+      throw err;
+    }
+  }
+  async removeLike(tweetId: string) {
+    try {
+      await this.updateOne({ tweetId }, { $inc: { like: -1 } });
     } catch (err) {
       throw err;
     }

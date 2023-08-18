@@ -53,6 +53,7 @@ const getTweet = async (req: Request, res: Response, next: NextFunction) => {
 
 const postAddLike = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const { id } = req.params;
   } catch (err) {
     next(err);
   }
