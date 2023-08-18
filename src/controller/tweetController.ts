@@ -4,9 +4,9 @@ import tweetEntity from "../entity/tweetEntity";
 const postTweet = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { content } = req.body;
-    const { _id } = res.locals;
+    const userId = res.locals._id;
     const tweet = await tweetEntity.createOne({
-      user: _id,
+      user: userId,
       content,
     });
     res.status(201).json({
@@ -51,12 +51,4 @@ const getTweet = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const postAddLike = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { id } = req.params;
-  } catch (err) {
-    next(err);
-  }
-};
-
-export { postTweet, getTweets, getTweet, postAddLike };
+export { postTweet, getTweets, getTweet };

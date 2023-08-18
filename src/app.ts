@@ -17,12 +17,14 @@ import userRoutes from "./routes/userRouter";
 import tweetRoutes from "./routes/tweetRouter";
 import followRoutes from "./routes/followRouter";
 import likeRoutes from "./routes/likeRouter";
+import replyRoutes from "./routes/replyRouter";
 import globalError from "./controller/globalErrorController";
 
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/tweet", tweetRoutes);
 app.use("/api/v1/follow", followRoutes);
 app.use("/api/v1/like", likeRoutes);
+app.use("/api/v1/reply", replyRoutes);
 
 app.use(globalError);
 
