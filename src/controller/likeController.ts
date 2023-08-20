@@ -4,10 +4,12 @@ import likeEntity from "../entity/likeEntity";
 const postAddLike = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = res.locals._id;
+
     const like = await likeEntity.addLike(
-      req.body.tweetId || req.params.id,
+      req.params.tweetId || req.body.tweetId,
       userId
     );
+
     res.status(201).json({
       status: "success",
       data: like,
@@ -24,9 +26,11 @@ const postRemoveLike = async (
 ) => {
   try {
     const userId = res.locals._id;
-    await likeEntity.removeLike(req.body.tweetId || req.params.id, userId);
+    await likeEntity.removeLike(req.params.tweetId || req.body.tweetId, userId);
+
     res.status(204).json({
       status: "success",
+      message: "Like has been removed",
     });
   } catch (err) {
     next(err);

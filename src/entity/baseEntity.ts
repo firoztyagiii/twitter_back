@@ -1,4 +1,6 @@
 import { FilterQuery, Model, ProjectionType, QueryOptions } from "mongoose";
+import AppError from "../utils/AppError";
+import { query } from "express";
 
 class BaseEntity<T, D> {
   constructor(protected model: Model<D>) {}

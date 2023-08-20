@@ -7,7 +7,10 @@ import { protect } from "../controller/authController";
 
 router.use(protect);
 
-router.route("/add").post(likeController.postAddLike);
-router.route("/remove").post(likeController.postRemoveLike);
+router.route("/").post(likeController.postAddLike);
+router.route("/").delete(likeController.postRemoveLike);
+
+router.route("/:tweetId/add").post(likeController.postAddLike);
+router.route("/:tweetId/remove").post(likeController.postRemoveLike);
 
 export default router;

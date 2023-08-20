@@ -1,4 +1,5 @@
 import TweetModel from "../models/tweetModel";
+import AppError from "../utils/AppError";
 import BaseEntity from "./baseEntity";
 
 import { FilterQuery, Model, ProjectionType, QueryOptions } from "mongoose";
@@ -25,31 +26,49 @@ class TweetEntity<T, D> extends BaseEntity<T, D> {
     }
   }
 
-  async findOne<K>(
+  async findOne(
     query: FilterQuery<T>,
-    projection?: ProjectionType<T>,
-    options?: QueryOptions<T>
-  ): Promise<any> {
-    const doc = await this.model.findOne(query, projection, options).populate({
-      path: "user",
-      select: {
-        password: false,
-        email: false,
-      },
-    });
-    if (!doc) return null;
-    return doc;
-  }
-  async addLike(tweetId: string) {
+    projection: ProjectionType<T> = {},
+    options: QueryOptions<T> = {}
+  ): Promise<D | null> {
     try {
-      await this.updateOne({ tweetId }, { $inc: { like: 1 } });
+      const doc = await this.model
+        .findOne(query, projection, options)
+        .populate({
+          path: "user",
+          select: {
+            password: false,
+            email: false,
+          },
+        });
+      if (!doc) {
+        throw new AppError("No tweet found for this ID", 404);
+      }
+      return doc as D;
     } catch (err) {
       throw err;
     }
   }
+
+  async addLike(tweetId: string) {
+    try {
+      await this.updateOne({ _id: tweetId }, { $inc: { likes: 1 } });
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async removeLike(tweetId: string) {
     try {
-      await this.updateOne({ tweetId }, { $inc: { like: -1 } });
+      await this.updateOne({ _id: tweetId }, { $inc: { likes: -1 } });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async addReply(tweetId: string) {
+    try {
+      await this.updateOne({ _id: tweetId }, { $inc: { replies: -1 } });
     } catch (err) {
       throw err;
     }
