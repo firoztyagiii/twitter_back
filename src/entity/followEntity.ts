@@ -2,36 +2,45 @@ import BaseEntity from "./baseEntity";
 import FollowModel from "../models/followModel";
 import { Model } from "mongoose";
 import AppError from "../utils/AppError";
+import tweetEntity from "./tweetEntity";
+import userEntity from "./userEntity";
 
 class FollowEntity<T, D> extends BaseEntity<T, D> {
   constructor(protected model: Model<D>) {
     super(model);
   }
 
-  async addFollow(user: string, userTo: string): Promise<D> {
+  async addFollow(userId: string, userTo: string): Promise<D> {
     try {
       const alreadyFollow = await this.findOne({
-        $and: [{ user: user }, { follow: userTo }],
+        $and: [{ userId: userId }, { follow: userTo }],
       });
       if (alreadyFollow) {
         throw new AppError("You already follow this user", 401);
       }
-      const followDoc = await this.model.create({ user: user, follow: userTo });
+      const followDoc = await this.createOne({
+        userId: userId,
+        follow: userTo,
+      } as T);
+      await userEntity.addFollow(userId);
       return followDoc;
     } catch (err) {
       throw err;
     }
   }
 
-  async removeFollow() {
+  async removeFollow(userId: string, userTo: string) {
     try {
-      await this.model.findOneAndDelete();
+      await this.model.findOneAndDelete({
+        $and: [{ userId }, { follow: userTo }],
+      });
+      await userEntity.removeFollow(userId);
     } catch (err) {
       throw err;
     }
   }
 
-  async getFollowers(id: string, page: number) {
+  async getFollowers(id: string, page: number = 1) {
     try {
       const LIMIT = 10;
       const TOTALDOC = await this.model.countDocuments();

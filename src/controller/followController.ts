@@ -3,9 +3,11 @@ import { Request, Response, NextFunction } from "express";
 
 const follow = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = res.locals._id;
+    const userId = res.locals._id;
     const { userTo } = req.params;
-    const followDoc = await followEntity.addFollow(user, userTo);
+
+    const followDoc = await followEntity.addFollow(userId, userTo);
+
     res.status(201).json({
       status: "success",
       data: followDoc,
@@ -17,9 +19,9 @@ const follow = async (req: Request, res: Response, next: NextFunction) => {
 
 const unfollow = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = res.locals._id;
+    const userId = res.locals._id;
     const { userTo } = req.params;
-    await followEntity.removeFollow();
+    await followEntity.removeFollow(userId, userTo);
   } catch (err) {
     next(err);
   }
@@ -31,20 +33,46 @@ const getFollowers = async (
   next: NextFunction
 ) => {
   try {
-    const id = res.locals._id;
-    const { page } = req.params;
-    const followers = await followEntity.getFollowers(id, +page);
+    const userId = res.locals._id;
+    const followers = await followEntity.findMany(
+      { userId },
+      req.query.page ? +req.query.page : 1
+    );
+    if (!followers) {
+      return res.status(200).json({
+        status: "success",
+        data: followers,
+      });
+    }
     res.status(200).json({
       status: "success",
-      data: {
-        followers,
-      },
+      data: followers,
     });
   } catch (err) {
     next(err);
   }
 };
 
-const getFollowings = async () => {};
+const getFollowings = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = res.locals._id;
+    const followings = await followEntity.findMany(
+      {
+        follow: userId,
+      },
+      req.query.page ? +req.query.page : 1
+    );
+    res.status(200).json({
+      status: "success",
+      data: followings,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 export { follow, unfollow, getFollowers, getFollowings };

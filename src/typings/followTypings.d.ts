@@ -3,7 +3,7 @@ export as namespace IFollow;
 import { Date, Document, Types } from "mongoose";
 
 interface Follow {
-  user: Types.ObjectId;
+  userId: Types.ObjectId;
   follow: Types.ObjectId;
 }
 
