@@ -68,7 +68,7 @@ class TweetEntity<T, D> extends BaseEntity<T, D> {
 
   async addReply(tweetId: string) {
     try {
-      await this.updateOne({ _id: tweetId }, { $inc: { replies: -1 } });
+      await this.updateOne({ _id: tweetId }, { $inc: { replies: 1 } });
     } catch (err) {
       throw err;
     }

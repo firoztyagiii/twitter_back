@@ -89,4 +89,18 @@ const getUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { signUp, login, getUser };
+const aboutMe = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const userId = res.locals._id;
+    const user = await userEntity.findUserById(userId);
+
+    res.status(200).json({
+      status: "success",
+      data: user,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export { signUp, login, getUser, aboutMe };

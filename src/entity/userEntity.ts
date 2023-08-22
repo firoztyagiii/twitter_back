@@ -9,6 +9,18 @@ class UserEntity<T, D> extends BaseEntity<T, D> {
   constructor(protected model: Model<D>) {
     super(Model);
   }
+
+  async findUserById(userId: string): Promise<D | null> {
+    try {
+      const user = await this.model
+        .findOne({ _id: userId })
+        .select("-email -password");
+      return user;
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async findByUsername(username: string): Promise<D | null> {
     try {
       const user = await this.model.findOne(
