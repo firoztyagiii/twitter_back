@@ -103,4 +103,19 @@ const aboutMe = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { signUp, login, getUser, aboutMe };
+const timeline = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { page } = req.params;
+    const userId = res.locals._id;
+    const timeline = await userEntity.getTimeline(userId, +page);
+
+    res.status(200).json({
+      status: "success",
+      data: timeline || null,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export { signUp, login, getUser, aboutMe, timeline };

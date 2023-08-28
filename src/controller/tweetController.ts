@@ -1,5 +1,6 @@
 import { Response, Request, NextFunction } from "express";
 import tweetEntity from "../entity/tweetEntity";
+import userEntity from "../entity/userEntity";
 
 const postTweet = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -51,4 +52,22 @@ const getTweet = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { postTweet, getTweets, getTweet };
+const getLatestTweet = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { userId } = req.params;
+    const latestTweet = await tweetEntity.getLatestTweet(userId);
+
+    res.status(200).json({
+      status: "success",
+      data: latestTweet || null,
+    });
+  } catch (err) {
+    throw err;
+  }
+};
+
+export { postTweet, getTweets, getTweet, getLatestTweet };

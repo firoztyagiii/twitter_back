@@ -11,4 +11,5 @@ interface TweetDocument extends Tweet, Document {
   likes: number;
   replies: number;
   retweet: number;
+  createdAt: Date;
 }

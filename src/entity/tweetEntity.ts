@@ -73,6 +73,18 @@ class TweetEntity<T, D> extends BaseEntity<T, D> {
       throw err;
     }
   }
+  async getLatestTweet(userId: string): Promise<D | null> {
+    try {
+      const tweet = await this.model
+        .find({ user: userId })
+        .sort({ _id: -1 })
+        .limit(1);
+
+      return tweet[0];
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 const tweetEntity = new TweetEntity<ITweet.Tweet, ITweet.TweetDocument>(

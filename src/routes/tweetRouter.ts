@@ -14,6 +14,7 @@ router.use("/:tweetId/unlike", likeRouter);
 
 router.route("/").get(tweetController.getTweets);
 router.route("/").post(tweetController.postTweet);
+router.route("/:userId/latest").get(tweetController.getLatestTweet);
 router.route("/:id").get(tweetController.getTweet);
 
 // router.route("/:id/retweet").post(tweetController.postAddLike);

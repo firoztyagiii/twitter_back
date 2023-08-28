@@ -23,6 +23,10 @@ const tweetSchema = new mongoose.Schema<ITweet.TweetDocument>({
     type: Number,
     default: 0,
   },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 const TweetModel = mongoose.model<ITweet.TweetDocument>("Tweets", tweetSchema);

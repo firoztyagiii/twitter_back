@@ -8,6 +8,8 @@ router.route("/signup").post(userController.signUp);
 router.route("/login").post(userController.login);
 
 router.route("/aboutme").get(authController.protect, userController.aboutMe);
+router.route("/timeline").get(authController.protect, userController.timeline);
+
 router.route("/:username").get(userController.getUser);
 
 export default router;

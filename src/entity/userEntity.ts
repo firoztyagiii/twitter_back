@@ -4,6 +4,7 @@ import followEntity from "./followEntity";
 import UserModel from "../models/userModel";
 import BaseEntity from "./baseEntity";
 import AppError from "../utils/AppError";
+import tweetEntity from "./tweetEntity";
 
 class UserEntity<T, D> extends BaseEntity<T, D> {
   constructor(protected model: Model<D>) {
@@ -51,6 +52,24 @@ class UserEntity<T, D> extends BaseEntity<T, D> {
         { _id: userId },
         { $inc: { followers: -1 } }
       );
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getTimeline(userId: string, page: number = 1) {
+    try {
+      const following = await followEntity.getFollowers(userId, page);
+
+      if (!following) {
+        return null;
+      }
+      const latestTweets = await Promise.all(
+        following.map((item) => {
+          return tweetEntity.getLatestTweet(item.follow.toString());
+        })
+      );
+      return latestTweets;
     } catch (err) {
       throw err;
     }

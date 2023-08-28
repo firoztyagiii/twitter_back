@@ -40,17 +40,21 @@ class FollowEntity<T, D> extends BaseEntity<T, D> {
     }
   }
 
-  async getFollowers(id: string, page: number = 1) {
+  async getFollowers(id: string, page: number = 1): Promise<D[] | null> {
     try {
       const LIMIT = 10;
-      const TOTALDOC = await this.model.countDocuments();
+      const TOTALDOC = await this.model.countDocuments({ userId: id });
+
+      if (TOTALDOC === 0) {
+        return null;
+      }
       const TOTALPAGES = TOTALDOC / LIMIT;
 
       if (page > TOTALPAGES) {
-        return new AppError("Maximum page number exceeded", 401);
+        throw new AppError("Maximum page number exceeded", 401);
       }
 
-      const query = this.model.find({ follow: id });
+      const query = this.model.find({ userId: id });
       if (page) {
         query.skip(page - 1 * LIMIT);
       }
