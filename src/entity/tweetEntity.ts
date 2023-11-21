@@ -78,8 +78,11 @@ class TweetEntity<T, D> extends BaseEntity<T, D> {
       const tweet = await this.model
         .find({ user: userId })
         .sort({ _id: -1 })
-        .limit(1);
-
+        .limit(1)
+        .populate({
+          path: "user",
+          select: "-password -email",
+        });
       return tweet[0];
     } catch (err) {
       throw err;

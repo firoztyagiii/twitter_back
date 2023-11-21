@@ -78,12 +78,10 @@ const getUser = async (req: Request, res: Response, next: NextFunction) => {
     if (!user) {
       return next(new AppError("Could not find the user", 404));
     }
-    setTimeout(() => {
-      res.status(200).json({
-        status: "success",
-        data: { user },
-      });
-    }, 1500);
+    res.status(200).json({
+      status: "success",
+      data: { user },
+    });
   } catch (err) {
     next(err);
   }

@@ -8,7 +8,7 @@ import tweetEntity from "./tweetEntity";
 
 class UserEntity<T, D> extends BaseEntity<T, D> {
   constructor(protected model: Model<D>) {
-    super(Model);
+    super(model);
   }
 
   async findUserById(userId: string): Promise<D | null> {
