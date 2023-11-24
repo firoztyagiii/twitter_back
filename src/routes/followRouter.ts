@@ -13,4 +13,6 @@ router.route("/:userTo/remove").post(followingController.unfollow);
 router.route("/followers").get(followingController.getFollowers);
 router.route("/followings").get(followingController.getFollowings);
 
+router.route("/:username/status").get(followingController.getFollowedStatus);
+
 export default router;

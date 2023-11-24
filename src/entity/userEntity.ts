@@ -5,6 +5,7 @@ import UserModel from "../models/userModel";
 import BaseEntity from "./baseEntity";
 import AppError from "../utils/AppError";
 import tweetEntity from "./tweetEntity";
+import FollowModel from "../models/followModel";
 
 class UserEntity<T, D> extends BaseEntity<T, D> {
   constructor(protected model: Model<D>) {
@@ -60,7 +61,6 @@ class UserEntity<T, D> extends BaseEntity<T, D> {
   async getTimeline(userId: string, page: number = 1) {
     try {
       const following = await followEntity.getFollowers(userId, page);
-
       if (!following) {
         return null;
       }
@@ -69,6 +69,7 @@ class UserEntity<T, D> extends BaseEntity<T, D> {
           return tweetEntity.getLatestTweet(item.follow.toString());
         })
       );
+      console.log(latestTweets);
       return latestTweets;
     } catch (err) {
       throw err;

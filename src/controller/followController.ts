@@ -1,5 +1,6 @@
 import followEntity from "../entity/followEntity";
 import { Request, Response, NextFunction } from "express";
+import userEntity from "../entity/userEntity";
 
 const follow = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -75,4 +76,30 @@ const getFollowings = async (
   }
 };
 
-export { follow, unfollow, getFollowers, getFollowings };
+const getFollowedStatus = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const user = await userEntity.findByUsername(req.params.username);
+    if (!user) {
+      return res.status(401).json({
+        status: "fail",
+        message: "No user found.",
+      });
+    }
+    const isFollowed = await followEntity.isFollowed(
+      res.locals._id,
+      user._id.toString()
+    );
+    res.status(200).json({
+      status: "success",
+      message: isFollowed,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export { follow, unfollow, getFollowers, getFollowings, getFollowedStatus };
