@@ -4,6 +4,7 @@ import userEntity from "../entity/userEntity";
 
 const postTweet = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    console.log(req.body, req.file);
     const { content } = req.body;
     const userId = res.locals._id;
     const tweet = await tweetEntity.createOne({

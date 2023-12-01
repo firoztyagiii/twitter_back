@@ -4,7 +4,6 @@ import likeEntity from "../entity/likeEntity";
 const postAddLike = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = res.locals._id;
-
     const like = await likeEntity.addLike(
       req.params.tweetId || req.body.tweetId,
       userId

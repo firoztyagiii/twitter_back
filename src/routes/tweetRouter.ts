@@ -1,6 +1,9 @@
 import express from "express";
 const router = express.Router();
 
+import multer from "multer";
+const upload = multer({ dest: "uploads/" });
+
 import * as authController from "../controller/authController";
 import * as tweetController from "../controller/tweetController";
 import replyRouter from "./replyRouter";
@@ -13,7 +16,7 @@ router.use("/:tweetId/like", likeRouter);
 router.use("/:tweetId/unlike", likeRouter);
 
 router.route("/").get(tweetController.getTweets);
-router.route("/").post(tweetController.postTweet);
+router.route("/").post(upload.single("image"), tweetController.postTweet);
 router.route("/:userId/latest").get(tweetController.getLatestTweet);
 router.route("/:id").get(tweetController.getTweet);
 

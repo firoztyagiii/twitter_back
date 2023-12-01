@@ -69,7 +69,6 @@ class UserEntity<T, D> extends BaseEntity<T, D> {
           return tweetEntity.getLatestTweet(item.follow.toString());
         })
       );
-      console.log(latestTweets);
       return latestTweets;
     } catch (err) {
       throw err;
