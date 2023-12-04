@@ -5,6 +5,7 @@ import { Types } from "mongoose";
 interface Tweet {
   user: Types.ObjectId;
   content: string;
+  media?: string;
 }
 
 interface TweetDocument extends Tweet, Document {
@@ -12,4 +13,5 @@ interface TweetDocument extends Tweet, Document {
   replies: number;
   retweet: number;
   createdAt: Date;
+  media: string;
 }

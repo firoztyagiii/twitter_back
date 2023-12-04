@@ -1,13 +1,14 @@
 import express from "express";
 const router = express.Router();
-
 import multer from "multer";
-const upload = multer({ dest: "uploads/" });
 
 import * as authController from "../controller/authController";
 import * as tweetController from "../controller/tweetController";
 import replyRouter from "./replyRouter";
 import likeRouter from "./likeRouter";
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 router.use(authController.protect);
 

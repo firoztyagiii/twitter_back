@@ -1,12 +1,15 @@
 import { Response, Request, NextFunction } from "express";
 import tweetEntity from "../entity/tweetEntity";
 import userEntity from "../entity/userEntity";
+import saveImage from "../utils/saveImage";
 
 const postTweet = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    console.log(req.body, req.file);
+    saveImage(req.file);
+    return;
     const { content } = req.body;
     const userId = res.locals._id;
+
     const tweet = await tweetEntity.createOne({
       user: userId,
       content,

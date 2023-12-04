@@ -23,6 +23,9 @@ const tweetSchema = new mongoose.Schema<ITweet.TweetDocument>({
     type: Number,
     default: 0,
   },
+  media: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
