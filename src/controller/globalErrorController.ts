@@ -1,9 +1,21 @@
 import { Request, Response, NextFunction } from "express";
+import Joi from "joi";
 
 const handleValidationError = (err: any, res: Response) => {
   let message: string[] = [];
   for (const error in err.errors) {
     message.push(err.errors[error].message);
+  }
+  res.status(400).json({
+    status: "fail",
+    message: message.join(", "),
+  });
+};
+
+const handleJoiValidationError = (err: Joi.ValidationError, res: Response) => {
+  let message: string[] = [];
+  for (const key of err.details) {
+    message.push(key.message);
   }
   res.status(400).json({
     status: "fail",
@@ -17,6 +29,10 @@ const globalError = (
   res: Response,
   next: NextFunction
 ) => {
+  if (err.name === "ValidationError" && err.isJoi) {
+    return handleJoiValidationError(err, res);
+  }
+
   if (err.name === "ValidationError") {
     return handleValidationError(err, res);
   }
@@ -28,7 +44,6 @@ const globalError = (
     });
   }
 
-  // TODO: HANDLE DUPLICATE EMAIL AND USERNAME ERROR
   console.log(err);
   res.json(err);
 };

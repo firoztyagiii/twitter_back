@@ -5,14 +5,13 @@ import saveImage from "../utils/saveImage";
 
 const postTweet = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    saveImage(req.file);
-    return;
     const { content } = req.body;
     const userId = res.locals._id;
 
     const tweet = await tweetEntity.createOne({
       user: userId,
       content,
+      media: res.locals.imageFileName,
     });
     res.status(201).json({
       status: "success",

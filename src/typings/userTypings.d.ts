@@ -7,7 +7,7 @@ export interface User {
   email: string;
   username: string;
   password: string;
-  confirmPassword: string;
+  confirmPassword?: string;
 }
 
 export interface UserDocument extends User, Document {
