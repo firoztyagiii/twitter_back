@@ -44,8 +44,8 @@ const globalError = (
     });
   }
 
-  console.log(err);
-  res.json(err);
+  console.log(err.name, "daskjdhadghadsga");
+  // res.json(err);
 };
 
 export default globalError;

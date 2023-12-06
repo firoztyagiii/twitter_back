@@ -6,6 +6,7 @@ export interface Reply {
   content: string;
   tweetId: Types.ObjectId;
   userId: Types.ObjectId;
+  media?: string;
 }
 
 export interface ReplyDocument extends Document, Reply {

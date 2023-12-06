@@ -28,6 +28,7 @@ const postReply = async (req: Request, res: Response, next: NextFunction) => {
       content,
       userId: new mongoose.Types.ObjectId(userId),
       tweetId,
+      media: res.locals.imageFileName,
     };
 
     const reply = await replyEntity.createOne(data);

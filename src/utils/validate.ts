@@ -71,4 +71,8 @@ const validateTweet = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
-export { validateSignup, validateLogin, validateTweet };
+const validateReply = (req: Request, res: Response, next: NextFunction) => {
+  return validateTweet;
+};
+
+export { validateSignup, validateLogin, validateTweet, validateReply };

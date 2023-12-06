@@ -18,6 +18,7 @@ const replySchema = new mongoose.Schema<IReply.ReplyDocument>({
     type: Date,
     default: Date.now(),
   },
+  media: { type: String },
   likes: Number,
   replies: Number,
   retweet: Number,
