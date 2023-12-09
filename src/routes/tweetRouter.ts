@@ -24,6 +24,5 @@ router.route("/:id").get(tweetController.getTweet);
 router
   .route("/")
   .post(upload.single("media"), validateTweet, tweetController.postTweet);
-// router.route("/:id/retweet").post(tweetController.postAddLike);
 
 export default router;

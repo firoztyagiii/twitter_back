@@ -83,6 +83,7 @@ const getFollowedStatus = async (
 ) => {
   try {
     const user = await userEntity.findByUsername(req.params.username);
+    // return;
     if (!user) {
       return res.status(401).json({
         status: "fail",

@@ -64,6 +64,7 @@ class UserEntity<T, D> extends BaseEntity<T, D> {
       if (!following) {
         return null;
       }
+
       const latestTweets = await Promise.all(
         following.map((item) => {
           return tweetEntity.getLatestTweet(item.follow.toString());

@@ -17,7 +17,7 @@ class LikeEntity<T, D> extends BaseEntity<T, D> {
       });
 
       if (alreadyLiked) {
-        throw new AppError("You have already liked this tweet", 401);
+        throw new AppError("You have already liked this tweet", 400);
       }
       const tweet = new mongoose.Types.ObjectId(tweetId);
       const user = new mongoose.Types.ObjectId(userId);

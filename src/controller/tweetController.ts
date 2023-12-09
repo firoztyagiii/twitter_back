@@ -13,6 +13,7 @@ const postTweet = async (req: Request, res: Response, next: NextFunction) => {
       content,
       media: res.locals.imageFileName,
     });
+
     res.status(201).json({
       status: "success",
       data: tweet,
