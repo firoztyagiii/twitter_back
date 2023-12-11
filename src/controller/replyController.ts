@@ -26,7 +26,7 @@ const postReply = async (req: Request, res: Response, next: NextFunction) => {
     const tweetId = req.params.tweetId || req.body.tweetId;
     const data = {
       content,
-      userId: new mongoose.Types.ObjectId(userId),
+      user: new mongoose.Types.ObjectId(userId),
       tweetId,
       media: res.locals.imageFileName,
     };

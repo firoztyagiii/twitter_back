@@ -58,7 +58,10 @@ class UserEntity<T, D> extends BaseEntity<T, D> {
     }
   }
 
-  async getTimeline(userId: string, page: number = 1) {
+  async getTimeline(
+    userId: string,
+    page: number = 1
+  ): Promise<ITweet.TweetDocument[] | null> {
     try {
       const following = await followEntity.getFollowers(userId, page);
       if (!following) {

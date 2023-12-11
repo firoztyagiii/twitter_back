@@ -1,7 +1,7 @@
 import BaseEntity from "./baseEntity";
 import LikeModel from "../models/likeModel";
 import tweetEntity from "./tweetEntity";
-import { Model } from "mongoose";
+import { FilterQuery, Model } from "mongoose";
 import AppError from "../utils/AppError";
 import mongoose from "mongoose";
 
@@ -39,6 +39,17 @@ class LikeEntity<T, D> extends BaseEntity<T, D> {
       }
       await this.deleteOne({ $and: [{ tweetId, userId }, {}] });
       await tweetEntity.removeLike(tweetId);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async findLikedTweets(
+    searchFilter: FilterQuery<ITweet.TweetDocument>
+  ): Promise<D[] | null> {
+    try {
+      const likedTweets = await this.model.find(searchFilter);
+      return likedTweets;
     } catch (err) {
       throw err;
     }

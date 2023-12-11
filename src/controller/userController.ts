@@ -4,6 +4,8 @@ import userEntity from "../entity/userEntity";
 import signToken from "../utils/signToken";
 import comparePassword from "../utils/comparePassword";
 import AppError from "../utils/AppError";
+import likeEntity from "../entity/likeEntity";
+import { time } from "console";
 
 const signUp = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -107,11 +109,38 @@ const timeline = async (req: Request, res: Response, next: NextFunction) => {
     const userId = res.locals._id;
     const timeline = await userEntity.getTimeline(userId, +page);
 
+    const ids = timeline?.map((tweet) => {
+      return tweet._id.toString();
+    });
+
+    const liked = await likeEntity.findLikedTweets({
+      tweetId: { $in: ids },
+      userId: userId,
+    });
+
+    const newData: any = [];
+
+    timeline?.forEach((tweet) => {
+      const likedTweet = liked?.find(
+        (item) => item.tweetId.toString() === tweet._id.toString()
+      );
+
+      if (likedTweet) {
+        tweet.isLiked = true;
+      } else {
+        tweet.isLiked = false;
+      }
+      newData.push(likedTweet);
+    });
+
+    console.log(newData);
+
     res.status(200).json({
       status: "success",
       data: timeline || null,
     });
   } catch (err) {
+    console.log(err);
     next(err);
   }
 };

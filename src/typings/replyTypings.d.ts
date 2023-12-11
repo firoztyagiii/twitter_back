@@ -5,7 +5,7 @@ import { Document, Types } from "mongoose";
 export interface Reply {
   content: string;
   tweetId: Types.ObjectId;
-  userId: Types.ObjectId;
+  user: Types.ObjectId;
   media?: string;
 }
 

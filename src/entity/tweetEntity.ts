@@ -73,7 +73,7 @@ class TweetEntity<T, D> extends BaseEntity<T, D> {
       throw err;
     }
   }
-  async getLatestTweet(userId: string): Promise<D | null> {
+  async getLatestTweet(userId: string): Promise<D> {
     try {
       const tweet = await this.model
         .find({ user: userId })
@@ -83,6 +83,7 @@ class TweetEntity<T, D> extends BaseEntity<T, D> {
           path: "user",
           select: "-password -email",
         });
+
       return tweet[0];
     } catch (err) {
       throw err;

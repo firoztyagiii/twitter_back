@@ -14,4 +14,6 @@ interface TweetDocument extends Tweet, Document {
   retweet: number;
   createdAt: Date;
   media: string;
+  _id: Types.ObjectId;
+  isLiked?: boolean;
 }

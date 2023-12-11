@@ -10,7 +10,7 @@ const replySchema = new mongoose.Schema<IReply.ReplyDocument>({
     ref: "Tweets",
     required: [true, "Tweet is required"],
   },
-  userId: {
+  user: {
     type: mongoose.Schema.ObjectId,
     ref: "Users",
   },
@@ -18,10 +18,21 @@ const replySchema = new mongoose.Schema<IReply.ReplyDocument>({
     type: Date,
     default: Date.now(),
   },
-  media: { type: String },
-  likes: Number,
-  replies: Number,
-  retweet: Number,
+  likes: {
+    type: Number,
+    default: 0,
+  },
+  replies: {
+    type: Number,
+    default: 0,
+  },
+  retweet: {
+    type: Number,
+    default: 0,
+  },
+  media: {
+    type: String,
+  },
 });
 
 const ReplyModel = mongoose.model("Reply", replySchema);

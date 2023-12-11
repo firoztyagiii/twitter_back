@@ -72,7 +72,7 @@ const validateTweet = (req: Request, res: Response, next: NextFunction) => {
 };
 
 const validateReply = (req: Request, res: Response, next: NextFunction) => {
-  return validateTweet;
+  return validateTweet(req, res, next);
 };
 
 export { validateSignup, validateLogin, validateTweet, validateReply };
