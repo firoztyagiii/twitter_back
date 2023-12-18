@@ -110,7 +110,7 @@ const timeline = async (req: Request, res: Response, next: NextFunction) => {
     const timeline = await userEntity.getTimeline(userId, +page);
 
     const ids = timeline?.map((tweet) => {
-      return tweet._id.toString();
+      return tweet._id?.toString();
     });
 
     const liked = await likeEntity.findLikedTweets({
@@ -118,26 +118,27 @@ const timeline = async (req: Request, res: Response, next: NextFunction) => {
       userId: userId,
     });
 
-    const newData: any = [];
+    let newData: any = [];
 
     timeline?.forEach((tweet) => {
-      const likedTweet = liked?.find(
-        (item) => item.tweetId.toString() === tweet._id.toString()
-      );
-
-      if (likedTweet) {
-        tweet.isLiked = true;
+      if (liked?.length !== 0) {
+        liked?.forEach((item) => {
+          if (item.tweetId.toString() === tweet?._id?.toString()) {
+            tweet.isLiked = true;
+            newData.push(tweet);
+          } else {
+            tweet.isLiked = false;
+            newData.push(tweet);
+          }
+        });
       } else {
-        tweet.isLiked = false;
+        newData = timeline;
       }
-      newData.push(likedTweet);
     });
-
-    console.log(newData);
 
     res.status(200).json({
       status: "success",
-      data: timeline || null,
+      data: newData || null,
     });
   } catch (err) {
     console.log(err);

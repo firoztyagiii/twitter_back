@@ -27,7 +27,7 @@ class UserEntity<T, D> extends BaseEntity<T, D> {
     try {
       const user = await this.model.findOne(
         { username: username },
-        { password: false, active: false }
+        { active: false }
       );
       if (!user) {
         return null;
@@ -73,6 +73,11 @@ class UserEntity<T, D> extends BaseEntity<T, D> {
           return tweetEntity.getLatestTweet(item.follow.toString());
         })
       );
+
+      if (!latestTweets[0]) {
+        return [];
+      }
+
       return latestTweets;
     } catch (err) {
       throw err;

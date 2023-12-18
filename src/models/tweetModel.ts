@@ -1,3 +1,4 @@
+import { boolean } from "joi";
 import mongoose from "mongoose";
 
 const tweetSchema = new mongoose.Schema<ITweet.TweetDocument>({
@@ -29,6 +30,13 @@ const tweetSchema = new mongoose.Schema<ITweet.TweetDocument>({
   createdAt: {
     type: Date,
     default: Date.now(),
+  },
+  repost: {
+    type: Boolean,
+  },
+  repostedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Users",
   },
 });
 

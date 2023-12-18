@@ -21,6 +21,8 @@ router.route("/").get(tweetController.getTweets);
 router.route("/:userId/latest").get(tweetController.getLatestTweet);
 router.route("/:id").get(tweetController.getTweet);
 
+router.route("/:id/repost").post(tweetController.postRepost);
+
 router
   .route("/")
   .post(upload.single("media"), validateTweet, tweetController.postTweet);

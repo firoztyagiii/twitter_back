@@ -11,6 +11,8 @@ router.route("/login").post(validateLogin, userController.login);
 router.route("/aboutme").get(authController.protect, userController.aboutMe);
 router.route("/timeline").get(authController.protect, userController.timeline);
 
+router.route("/:username/info").post(authController.getUserByPassword);
+
 router.route("/:username").get(userController.getUser);
 
 export default router;

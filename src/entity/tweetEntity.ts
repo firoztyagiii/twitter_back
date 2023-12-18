@@ -15,11 +15,12 @@ class TweetEntity<T, D> extends BaseEntity<T, D> {
     options?: QueryOptions<D>
   ) {
     try {
-      const tweets = await this.model.find(
-        filter,
-        projection || {},
-        options || {}
-      );
+      const tweets = await this.model
+        .find(filter, projection || {}, options || {})
+        .populate({
+          path: "user",
+          select: "-password",
+        });
       return tweets;
     } catch (err) {
       throw err;
@@ -34,6 +35,7 @@ class TweetEntity<T, D> extends BaseEntity<T, D> {
     try {
       const doc = await this.model
         .findOne(query, projection, options)
+        .lean()
         .populate({
           path: "user",
           select: {
@@ -58,6 +60,16 @@ class TweetEntity<T, D> extends BaseEntity<T, D> {
     }
   }
 
+  async checkRepost() {}
+
+  async addRepost(tweetId: string) {
+    try {
+      await this.updateOne({ _id: tweetId }, { $inc: { retweet: 1 } });
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async removeLike(tweetId: string) {
     try {
       await this.updateOne({ _id: tweetId }, { $inc: { likes: -1 } });
@@ -73,12 +85,13 @@ class TweetEntity<T, D> extends BaseEntity<T, D> {
       throw err;
     }
   }
-  async getLatestTweet(userId: string): Promise<D> {
+  async getLatestTweet(userId: string) {
     try {
       const tweet = await this.model
         .find({ user: userId })
         .sort({ _id: -1 })
         .limit(1)
+        .lean()
         .populate({
           path: "user",
           select: "-password -email",

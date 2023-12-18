@@ -1,11 +1,13 @@
 export as namespace ITweet;
 
-import { Types } from "mongoose";
+import { Types, Document } from "mongoose";
 
 interface Tweet {
   user: Types.ObjectId;
   content: string;
   media?: string;
+  repost?: boolean;
+  repostedBy?: Types.ObjectId;
 }
 
 interface TweetDocument extends Tweet, Document {
@@ -14,6 +16,6 @@ interface TweetDocument extends Tweet, Document {
   retweet: number;
   createdAt: Date;
   media: string;
-  _id: Types.ObjectId;
+  _id?: Types.ObjectId;
   isLiked?: boolean;
 }
