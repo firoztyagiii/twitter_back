@@ -18,7 +18,7 @@ class TweetEntity<T, D> extends BaseEntity<T, D> {
       const tweets = await this.model
         .find(filter, projection || {}, options || {})
         .populate({
-          path: "user",
+          path: "user repostedBy originalTweet",
           select: "-password",
         });
       return tweets;
@@ -27,26 +27,46 @@ class TweetEntity<T, D> extends BaseEntity<T, D> {
     }
   }
 
+  async getUserTweets(id: string) {
+    const tweets = await tweetEntity.find({
+      $or: [{ user: id }, { repostedBy: id }],
+    });
+    return tweets;
+  }
+
   async findOne(
     query: FilterQuery<T>,
     projection: ProjectionType<T> = {},
     options: QueryOptions<T> = {}
   ): Promise<D | null> {
     try {
-      const doc = await this.model
-        .findOne(query, projection, options)
-        .lean()
-        .populate({
-          path: "user",
-          select: {
-            password: false,
-            email: false,
-          },
-        });
-      if (!doc) {
-        throw new AppError("No tweet found for this ID", 404);
-      }
+      const doc = await this.model.findOne(query).populate({
+        path: "user",
+        select: {
+          password: false,
+          email: false,
+        },
+      });
+      // if (!doc) {
+      //   throw new AppError("No tweet found for this ID ===========>", 404);
+      // }
       return doc as D;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async isAllowedToRepost(tweetId: string, userId: string) {
+    try {
+      const repost = await this.findOne({
+        originalTweet: tweetId,
+        repostedBy: userId,
+      });
+      if (!repost) {
+        return false;
+      } else {
+        return true;
+      }
     } catch (err) {
       throw err;
     }
@@ -64,7 +84,11 @@ class TweetEntity<T, D> extends BaseEntity<T, D> {
 
   async addRepost(tweetId: string) {
     try {
-      await this.updateOne({ _id: tweetId }, { $inc: { retweet: 1 } });
+      const updatedDoc = await this.model.findOneAndUpdate(
+        { _id: tweetId },
+        { $inc: { retweet: 1 } }
+      );
+      console.log(updatedDoc);
     } catch (err) {
       throw err;
     }

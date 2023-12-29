@@ -12,6 +12,7 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 router.use(authController.protect);
+router.route("/:id/repost").post(tweetController.postRepost);
 
 router.use("/:tweetId/reply", replyRouter);
 router.use("/:tweetId/like", likeRouter);
@@ -20,8 +21,6 @@ router.use("/:tweetId/unlike", likeRouter);
 router.route("/").get(tweetController.getTweets);
 router.route("/:userId/latest").get(tweetController.getLatestTweet);
 router.route("/:id").get(tweetController.getTweet);
-
-router.route("/:id/repost").post(tweetController.postRepost);
 
 router
   .route("/")

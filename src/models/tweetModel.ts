@@ -5,11 +5,9 @@ const tweetSchema = new mongoose.Schema<ITweet.TweetDocument>({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Users",
-    required: [true, "User is required to post a tweet"],
   },
   content: {
     type: String,
-    required: [true, "Tweet content is required"],
     maxLength: [160, "Content is max 160 lengths"],
   },
   likes: {
@@ -37,6 +35,10 @@ const tweetSchema = new mongoose.Schema<ITweet.TweetDocument>({
   repostedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Users",
+  },
+  originalTweet: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Tweets",
   },
 });
 

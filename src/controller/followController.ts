@@ -23,6 +23,9 @@ const unfollow = async (req: Request, res: Response, next: NextFunction) => {
     const userId = res.locals._id;
     const { userTo } = req.params;
     await followEntity.removeFollow(userId, userTo);
+    res.status(201).json({
+      status: "success",
+    });
   } catch (err) {
     next(err);
   }

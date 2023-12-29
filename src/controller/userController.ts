@@ -73,6 +73,15 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
+const logout = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    res.cookie("token", " ");
+    res.status(200).json({ status: "success" });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const getUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { username } = req.params;
@@ -146,4 +155,46 @@ const timeline = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { signUp, login, getUser, aboutMe, timeline };
+const changePassword = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { newPassword, currentPassword } = req.body;
+    const user = await userEntity.findByUsername(res.locals.user.username);
+    if (!user)
+      throw new AppError("Cant find logged in user, please login again", 400);
+    const isPassCorrect = await comparePassword(user.password, currentPassword);
+    if (!isPassCorrect) throw new AppError("Incorrect password", 400);
+    user.password = newPassword;
+    user.confirmPassword = newPassword;
+    await user.save();
+    res.status(201).json({
+      status: "success",
+      message: "Password changed successfully.",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const patchUser = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { username, name } = req.body;
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
+export {
+  signUp,
+  login,
+  getUser,
+  aboutMe,
+  timeline,
+  changePassword,
+  patchUser,
+  logout,
+};

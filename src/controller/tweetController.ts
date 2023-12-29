@@ -26,9 +26,11 @@ const postTweet = async (req: Request, res: Response, next: NextFunction) => {
 
 const getTweets = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const tweets = await tweetEntity.find({
-      $or: [{ user: res.locals._id }, { repostedBy: res.locals._id }],
-    });
+    // const tweets = await tweetEntity.find({
+    //   $or: [{ user: res.locals._id }, { repostedBy: res.locals._id }],
+    // });
+
+    const tweets = await tweetEntity.getUserTweets(res.locals._id);
 
     // const awaitedFetchedPromises = [];
 
@@ -41,7 +43,7 @@ const getTweets = async (req: Request, res: Response, next: NextFunction) => {
     res.status(200).json({
       status: "success",
       data: {
-        total: tweets.length,
+        total: tweets,
         docs: tweets,
       },
     });
@@ -89,16 +91,26 @@ const getLatestTweet = async (
 const postRepost = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
+
     const tweet = await tweetEntity.findOne({ _id: id });
+
     if (!tweet) {
       throw new AppError("No tweet found for repost", 400);
     }
-    delete tweet._id;
-    const repost = await tweetEntity.createOne({
-      ...tweet,
+
+    const retweet = {
       repost: true,
       repostedBy: res.locals._id,
-    });
+      originalTweet: tweet._id,
+    };
+
+    const isAllowed = await tweetEntity.isAllowedToRepost(id, res.locals._id);
+
+    if (!isAllowed) {
+      throw new AppError("You have already retweeted this post.", 400);
+    }
+
+    const repost = await tweetEntity.createOne(retweet);
 
     await tweetEntity.addRepost(id);
 

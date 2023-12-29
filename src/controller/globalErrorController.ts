@@ -19,7 +19,7 @@ const handleJoiValidationError = (err: Joi.ValidationError, res: Response) => {
   }
   res.status(400).json({
     status: "fail",
-    message: message.join(", "),
+    message: message.join(", ").toString(),
   });
 };
 
@@ -44,7 +44,7 @@ const globalError = (
     });
   }
 
-  console.log(err.name, "daskjdhadghadsga");
+  console.log(err, "<<< GLOBAL ERROR");
   // res.json(err);
 };
 

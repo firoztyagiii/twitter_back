@@ -71,8 +71,34 @@ const validateTweet = (req: Request, res: Response, next: NextFunction) => {
   next();
 };
 
+const validateChangePassword = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const schema = Joi.object()
+    .keys({
+      currentPassword: Joi.string().min(8).required(),
+      newPassword: Joi.string().required().min(8),
+      confirmPassword: Joi.string().valid(Joi.ref("newPassword")).required(),
+    })
+    .unknown(true);
+
+  const { error } = schema.validate(req.body, { abortEarly: false });
+  if (error) {
+    return next(error);
+  }
+  next();
+};
+
 const validateReply = (req: Request, res: Response, next: NextFunction) => {
   return validateTweet(req, res, next);
 };
 
-export { validateSignup, validateLogin, validateTweet, validateReply };
+export {
+  validateSignup,
+  validateLogin,
+  validateTweet,
+  validateReply,
+  validateChangePassword,
+};

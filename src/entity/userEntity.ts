@@ -37,20 +37,28 @@ class UserEntity<T, D> extends BaseEntity<T, D> {
       throw err;
     }
   }
-  async addFollow(userId: string) {
+  async addFollow(userId: string, follow: string) {
     try {
       await this.model.findOneAndUpdate(
         { _id: userId },
         { $inc: { followings: 1 } }
       );
+      await this.model.findByIdAndUpdate(
+        { _id: follow },
+        { $inc: { followers: 1 } }
+      );
     } catch (err) {
       throw err;
     }
   }
-  async removeFollow(userId: string) {
+  async removeFollow(userId: string, follow: string) {
     try {
       await this.model.findOneAndUpdate(
         { _id: userId },
+        { $inc: { followings: -1 } }
+      );
+      await this.model.findByIdAndUpdate(
+        { _id: follow },
         { $inc: { followers: -1 } }
       );
     } catch (err) {
