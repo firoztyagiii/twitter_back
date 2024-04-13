@@ -26,11 +26,11 @@ const postTweet = async (req: Request, res: Response, next: NextFunction) => {
 
 const getTweets = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    // const tweets = await tweetEntity.find({
-    //   $or: [{ user: res.locals._id }, { repostedBy: res.locals._id }],
-    // });
+    const tweets = await tweetEntity.find({
+      $or: [{ user: res.locals._id }, { repostedBy: res.locals._id }],
+    });
 
-    const tweets = await tweetEntity.getUserTweets(res.locals._id);
+    // const tweets = await tweetEntity.getUserTweets(res.locals._id);
 
     // const awaitedFetchedPromises = [];
 

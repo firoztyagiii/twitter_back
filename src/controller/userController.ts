@@ -5,7 +5,6 @@ import signToken from "../utils/signToken";
 import comparePassword from "../utils/comparePassword";
 import AppError from "../utils/AppError";
 import likeEntity from "../entity/likeEntity";
-import { time } from "console";
 
 const signUp = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -18,7 +17,7 @@ const signUp = async (req: Request, res: Response, next: NextFunction) => {
       confirmPassword,
     });
     const token = await signToken(user);
-    // TODO: set cookies
+
     res.cookie("token", token, {
       expires: new Date(60 * 1000 * 60 * 60),
       httpOnly: true,

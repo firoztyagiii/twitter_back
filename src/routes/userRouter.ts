@@ -3,6 +3,7 @@ const router = express.Router();
 
 import * as userController from "../controller/userController";
 import * as authController from "../controller/authController";
+
 import {
   validateLogin,
   validateSignup,

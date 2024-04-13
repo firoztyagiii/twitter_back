@@ -11,9 +11,13 @@ const validateImageAndSave = (image: any) => {
   const isAllowed = allowedExtensions.includes(extension);
 
   if (!isAllowed) throw new AppError(`${extension} is not allowed`, 401);
+
   let randomString = (Math.random() + 1).toString(36).substring(7);
+
   const fileName = `${Date.now()}-${randomString}.${extension}`;
+
   const filePath = path.resolve(`${__dirname}/../../public/img/${fileName}`);
+
   fs.writeFile(filePath, image.buffer, () => {});
 
   return `img/${fileName}`;

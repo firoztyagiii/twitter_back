@@ -18,11 +18,11 @@ const signToken = (payload: IUser.UserDocument): Promise<string> => {
         expiresIn: EXPIRES_IN,
       },
       (err, token) => {
+        if (err) {
+          return reject(err);
+        }
         if (token) {
           resolve(token);
-        }
-        if (err) {
-          reject(err);
         }
       }
     );

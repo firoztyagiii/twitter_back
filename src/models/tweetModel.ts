@@ -1,6 +1,11 @@
-import { boolean } from "joi";
 import mongoose from "mongoose";
 
+enum TweetType {
+  Tweet = "tweet",
+  Reply = "reply",
+  Repost = "repost",
+}
+``;
 const tweetSchema = new mongoose.Schema<ITweet.TweetDocument>({
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -35,6 +40,10 @@ const tweetSchema = new mongoose.Schema<ITweet.TweetDocument>({
   repostedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Users",
+  },
+  tweetType: {
+    type: String,
+    enum: Object.values(TweetType),
   },
   originalTweet: {
     type: mongoose.Schema.Types.ObjectId,

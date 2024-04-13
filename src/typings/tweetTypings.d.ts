@@ -2,8 +2,15 @@ export as namespace ITweet;
 
 import { Types, Document } from "mongoose";
 
+enum TweetType {
+  Tweet = "tweet",
+  Reply = "reply",
+  Repost = "repost",
+}
+
 interface Tweet {
   user?: Types.ObjectId;
+  tweetType: TweetType;
   content?: string;
   media?: string;
   repost?: boolean;
