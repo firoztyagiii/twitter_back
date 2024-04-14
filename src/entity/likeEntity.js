@@ -8,7 +8,6 @@ const mongoose = require("mongoose");
 class LikeEntity extends BaseEntity {
   constructor(model) {
     super(model);
-    this.model = model;
   }
 
   async addLike(tweetId, userId) {
@@ -23,7 +22,6 @@ class LikeEntity extends BaseEntity {
       const tweet = new mongoose.Types.ObjectId(tweetId);
       const user = new mongoose.Types.ObjectId(userId);
       const like = await this.createOne({ tweetId: tweet, userId: user });
-      await tweetEntity.addLike(tweetId);
       return like;
     } catch (err) {
       throw err;

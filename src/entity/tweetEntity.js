@@ -1,5 +1,6 @@
 const TweetModel = require("../models/tweetModel");
 const AppError = require("../utils/AppError");
+const likeEntity = require("./likeEntity");
 const BaseEntity = require("./baseEntity");
 
 const {
@@ -69,9 +70,10 @@ class TweetEntity extends BaseEntity {
     }
   }
 
-  async addLike(tweetId) {
+  async addLike(tweetId, userId) {
     try {
       await this.updateOne({ _id: tweetId }, { $inc: { likes: 1 } });
+      return await likeEntity.addLike(tweetId, userId);
     } catch (err) {
       throw err;
     }
@@ -81,11 +83,10 @@ class TweetEntity extends BaseEntity {
 
   async addRepost(tweetId) {
     try {
-      const updatedDoc = await this.model.findOneAndUpdate(
+      await this.model.findOneAndUpdate(
         { _id: tweetId },
         { $inc: { retweet: 1 } }
       );
-      console.log(updatedDoc);
     } catch (err) {
       throw err;
     }

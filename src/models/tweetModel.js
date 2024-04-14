@@ -35,9 +35,14 @@ const tweetSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Users",
   },
+  repliedBy: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
   originalTweet: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Tweets",
+  },
+  type: {
+    type: String,
+    enum: ["tweet", "reply", "retweet"],
   },
 });
 

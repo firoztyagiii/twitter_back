@@ -113,6 +113,7 @@ exports.timeline = async (req, res, next) => {
   try {
     const { page } = req.params;
     const userId = res.locals._id;
+
     const timeline = await userEntity.getTimeline(userId, +page);
 
     const ids = timeline?.map((tweet) => {
@@ -124,7 +125,7 @@ exports.timeline = async (req, res, next) => {
       userId: userId,
     });
 
-    let newData;
+    let newData = [];
 
     timeline?.forEach((tweet) => {
       if (liked?.length !== 0) {

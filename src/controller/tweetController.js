@@ -10,6 +10,7 @@ exports.postTweet = async (req, res, next) => {
       user: userId,
       content,
       media: res.locals.imageFileName,
+      type: "tweet",
     });
 
     res.status(201).json({
@@ -20,6 +21,70 @@ exports.postTweet = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.postRetweet = async (req, res, next) => {
+  try {
+    const userId = res.locals._id;
+    const tweetId = req.params.id;
+
+    const retweet = await tweetEntity.createOne({
+      repost: true,
+      repostedBy: userId,
+      originalTweet: tweetId,
+      type: "retweet",
+    });
+
+    await tweetEntity.addRepost(tweetId);
+
+    res.status(201).json({
+      status: "success",
+      data: retweet,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.postReply = async (req, res, next) => {
+  try {
+    const userId = res.locals._id;
+    const tweetId = req.params.id;
+    const { content } = req.body;
+
+    const retweet = await tweetEntity.createOne({
+      type: "reply",
+      content,
+      repliedBy: userId,
+      originalTweet: tweetId,
+    });
+
+    await tweetEntity.addReply(tweetId);
+
+    res.status(201).json({
+      status: "success",
+      data: retweet,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.postLike = async (req, res, next) => {
+  try {
+    const userId = res.locals._id;
+    const tweetId = req.params.id;
+    const likedTweet = await tweetEntity.addLike(tweetId, userId);
+
+    res.status(201).json({
+      status: "success",
+      data: likedTweet,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.deleteLike = async (req, res, next) => {};
 
 exports.getTweets = async (req, res, next) => {
   try {
