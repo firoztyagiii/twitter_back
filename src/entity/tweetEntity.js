@@ -1,14 +1,7 @@
 const TweetModel = require("../models/tweetModel");
 const AppError = require("../utils/AppError");
-const likeEntity = require("./likeEntity");
-const BaseEntity = require("./baseEntity");
 
-const {
-  FilterQuery,
-  Model,
-  ProjectionType,
-  QueryOptions,
-} = require("mongoose");
+const BaseEntity = require("./baseEntity");
 
 class TweetEntity extends BaseEntity {
   constructor(model) {
@@ -30,9 +23,7 @@ class TweetEntity extends BaseEntity {
   }
 
   async getUserTweets(id) {
-    const tweets = await tweetEntity.find({
-      $or: [{ user: id }, { repostedBy: id }],
-    });
+    const tweets = await this.findMany({ user: id, type: "tweet" });
     return tweets;
   }
 
@@ -70,10 +61,9 @@ class TweetEntity extends BaseEntity {
     }
   }
 
-  async addLike(tweetId, userId) {
+  async addLike(tweetId) {
     try {
       await this.updateOne({ _id: tweetId }, { $inc: { likes: 1 } });
-      return await likeEntity.addLike(tweetId, userId);
     } catch (err) {
       throw err;
     }

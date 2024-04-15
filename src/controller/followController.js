@@ -37,12 +37,7 @@ exports.getFollowers = async (req, res, next) => {
       { userId },
       req.query.page ? +req.query.page : 1
     );
-    if (!followers) {
-      return res.status(200).json({
-        status: "success",
-        data: followers,
-      });
-    }
+
     res.status(200).json({
       status: "success",
       data: followers,
@@ -73,7 +68,6 @@ exports.getFollowings = async (req, res, next) => {
 exports.getFollowedStatus = async (req, res, next) => {
   try {
     const user = await userEntity.findByUsername(req.params.username);
-    // return;
     if (!user) {
       return res.status(401).json({
         status: "fail",

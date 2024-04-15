@@ -1,8 +1,7 @@
-const BaseEntity = require("./baseEntity");
 const FollowModel = require("../models/followModel");
 const AppError = require("../utils/AppError");
-const tweetEntity = require("./tweetEntity");
-const userEntity = require("./userEntity");
+
+const BaseEntity = require("./baseEntity");
 
 class FollowEntity extends BaseEntity {
   constructor(model) {

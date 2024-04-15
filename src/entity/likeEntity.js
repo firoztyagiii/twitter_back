@@ -1,9 +1,8 @@
-const BaseEntity = require("./baseEntity");
 const LikeModel = require("../models/likeModel");
-const tweetEntity = require("./tweetEntity");
-const { FilterQuery, Model } = require("mongoose");
 const AppError = require("../utils/AppError");
 const mongoose = require("mongoose");
+
+const BaseEntity = require("./baseEntity");
 
 class LikeEntity extends BaseEntity {
   constructor(model) {
@@ -37,7 +36,6 @@ class LikeEntity extends BaseEntity {
         );
       }
       await this.deleteOne({ $and: [{ tweetId, userId }, {}] });
-      await tweetEntity.removeLike(tweetId);
     } catch (err) {
       throw err;
     }

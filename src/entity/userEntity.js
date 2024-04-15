@@ -1,10 +1,9 @@
-const followEntity = require("./followEntity");
+const AppError = require("../utils/AppError");
 
 const UserModel = require("../models/userModel");
-const BaseEntity = require("./baseEntity");
-const AppError = require("../utils/AppError");
-const tweetEntity = require("./tweetEntity");
 const FollowModel = require("../models/followModel");
+
+const BaseEntity = require("./baseEntity");
 
 class UserEntity extends BaseEntity {
   constructor(model) {
@@ -36,6 +35,7 @@ class UserEntity extends BaseEntity {
       throw err;
     }
   }
+
   async addFollow(userId, follow) {
     try {
       await this.model.findOneAndUpdate(
@@ -50,6 +50,7 @@ class UserEntity extends BaseEntity {
       throw err;
     }
   }
+
   async removeFollow(userId, follow) {
     try {
       await this.model.findOneAndUpdate(

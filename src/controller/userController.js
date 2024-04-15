@@ -125,23 +125,25 @@ exports.timeline = async (req, res, next) => {
       userId: userId,
     });
 
-    let newData = [];
+    console.log(timeline);
 
-    timeline?.forEach((tweet) => {
-      if (liked?.length !== 0) {
-        liked?.forEach((item) => {
-          if (item.tweetId.toString() === tweet?._id?.toString()) {
-            tweet.isLiked = true;
-            newData.push(tweet);
-          } else {
-            tweet.isLiked = false;
-            newData.push(tweet);
-          }
-        });
-      } else {
-        newData = timeline;
-      }
-    });
+    // let newData = [];
+
+    // timeline.forEach((tweet) => {
+    //   if (liked.length !== 0) {
+    //     liked.forEach((item) => {
+    //       if (item.tweetId.toString() === tweet._id.toString()) {
+    //         tweet.isLiked = true;
+    //         newData.push(tweet);
+    //       } else {
+    //         tweet.isLiked = false;
+    //         newData.push(tweet);
+    //       }
+    //     });
+    //   } else {
+    //     newData = timeline;
+    //   }
+    // });
 
     res.status(200).json({
       status: "success",
@@ -159,6 +161,7 @@ exports.changePassword = async (req, res, next) => {
     const user = await userEntity.findByUsername(res.locals.user.username);
     if (!user)
       throw new AppError("Cant find logged in user, please login again", 400);
+
     const isPassCorrect = await comparePassword(user.password, currentPassword);
     if (!isPassCorrect) throw new AppError("Incorrect password", 400);
     user.password = newPassword;

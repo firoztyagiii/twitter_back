@@ -4,8 +4,6 @@ const multer = require("multer");
 
 const authController = require("../controller/authController");
 const tweetController = require("../controller/tweetController");
-// const replyRouter = require("./replyRouter");
-// const likeRouter = require("./likeRouter");
 const { validateTweet } = require("../utils/validate");
 
 const storage = multer.memoryStorage();

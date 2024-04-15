@@ -1,4 +1,5 @@
 const tweetEntity = require("../entity/tweetEntity");
+const likeEntity = require("../entity/likeEntity");
 const AppError = require("../utils/AppError");
 
 exports.postTweet = async (req, res, next) => {
@@ -33,7 +34,6 @@ exports.postRetweet = async (req, res, next) => {
       originalTweet: tweetId,
       type: "retweet",
     });
-
     await tweetEntity.addRepost(tweetId);
 
     res.status(201).json({
@@ -73,7 +73,9 @@ exports.postLike = async (req, res, next) => {
   try {
     const userId = res.locals._id;
     const tweetId = req.params.id;
-    const likedTweet = await tweetEntity.addLike(tweetId, userId);
+
+    await likeEntity.addLike(tweetId, userId);
+    const likedTweet = await tweetEntity.addLike(tweetId);
 
     res.status(201).json({
       status: "success",
@@ -84,30 +86,34 @@ exports.postLike = async (req, res, next) => {
   }
 };
 
-exports.deleteLike = async (req, res, next) => {};
+exports.deleteLike = async (req, res, next) => {
+  try {
+    const userId = res.locals._id;
+    const tweetId = req.params.id;
+
+    await likeEntity.removeLike(tweetId, userId);
+
+    await tweetEntity.removeLike(tweetId);
+
+    res.status(204).json({
+      status: "success",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 exports.getTweets = async (req, res, next) => {
   try {
-    const tweets = await tweetEntity.find({
-      $or: [{ user: res.locals._id }, { repostedBy: res.locals._id }],
-    });
-
-    // const tweets = await tweetEntity.getUserTweets(res.locals._id);
-
-    // const awaitedFetchedPromises = [];
-
-    // const fetchedTweets = tweets.forEach((tweet) => {
-    //   if (tweet.repost) {
-    //     awaitedFetchedPromises.push();
-    //   }
-    // });
+    const tweets = await tweetEntity.getUserTweets(res.locals._id);
 
     res.status(200).json({
       status: "success",
       data: {
-        total: tweets,
+        total: tweets.length,
         docs: tweets,
       },
+      pagination: "WILL BE ADDED",
     });
   } catch (err) {
     next(err);
@@ -142,7 +148,7 @@ exports.getLatestTweet = async (req, res, next) => {
       data: latestTweet || null,
     });
   } catch (err) {
-    throw err;
+    next(err);
   }
 };
 
