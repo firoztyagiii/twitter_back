@@ -40,7 +40,7 @@ class BaseEntity {
     }
   }
 
-  async findMany(searchQuery, PAGE = 1) {
+  async findMany(searchQuery, PAGE = 1, populate) {
     try {
       const TOTAL_DOCS = await this.model.countDocuments(searchQuery);
       if (TOTAL_DOCS) {
@@ -54,6 +54,9 @@ class BaseEntity {
         const SKIP = PAGE > 1 ? PAGE - 1 * LIMIT : 0;
         const query = this.model.find(searchQuery);
         query.skip(SKIP).limit(LIMIT);
+        if (populate) {
+          query.populate(populate);
+        }
         return query;
       } else {
         return null;

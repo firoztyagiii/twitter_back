@@ -7,6 +7,7 @@ exports.follow = async (req, res, next) => {
     const { userTo } = req.params;
 
     const followDoc = await followEntity.addFollow(userId, userTo);
+    await userEntity.addFollow(userId, userTo);
 
     res.status(201).json({
       status: "success",
@@ -21,7 +22,10 @@ exports.unfollow = async (req, res, next) => {
   try {
     const userId = res.locals._id;
     const { userTo } = req.params;
+
     await followEntity.removeFollow(userId, userTo);
+    await userEntity.removeFollow(userId, userTo);
+
     res.status(201).json({
       status: "success",
     });

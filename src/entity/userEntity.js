@@ -2,6 +2,7 @@ const AppError = require("../utils/AppError");
 
 const UserModel = require("../models/userModel");
 const FollowModel = require("../models/followModel");
+const followEntity = require("./followEntity");
 
 const BaseEntity = require("./baseEntity");
 
@@ -66,28 +67,29 @@ class UserEntity extends BaseEntity {
     }
   }
 
-  async getTimeline(userId, page = 1) {
-    try {
-      const following = await followEntity.getFollowers(userId, page);
-      if (!following) {
-        return null;
-      }
+  // async getTimeline(userId, page = 1) {
+  //   try {
+  //     const following = await followEntity.getFollowers(userId, page);
 
-      const latestTweets = await Promise.all(
-        following.map((item) => {
-          return tweetEntity.getLatestTweet(item.follow.toString());
-        })
-      );
+  //     if (!following) {
+  //       return null;
+  //     }
 
-      if (!latestTweets[0]) {
-        return [];
-      }
+  //     const latestTweets = await Promise.all(
+  //       following.map((item) => {
+  //         return tweetEntity.getLatestTweet(item.follow.toString());
+  //       })
+  //     );
 
-      return latestTweets;
-    } catch (err) {
-      throw err;
-    }
-  }
+  //     if (!latestTweets[0]) {
+  //       return [];
+  //     }
+
+  //     return latestTweets;
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  // }
 }
 
 const userEntity = new UserEntity(UserModel);

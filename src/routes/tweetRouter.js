@@ -26,4 +26,6 @@ router.route("/").get(tweetController.getTweets);
 
 router.route("/:userId/latest").get(tweetController.getLatestTweet);
 
+router.route("/:id/reply").get(tweetController.getReplies);
+
 module.exports = router;

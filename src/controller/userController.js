@@ -3,6 +3,8 @@ const signToken = require("../utils/signToken");
 const comparePassword = require("../utils/comparePassword");
 const AppError = require("../utils/AppError");
 const likeEntity = require("../entity/likeEntity");
+const tweetEntity = require("../entity/tweetEntity");
+const followEntity = require("../entity/followEntity");
 
 exports.signUp = async (req, res, next) => {
   try {
@@ -113,44 +115,48 @@ exports.timeline = async (req, res, next) => {
   try {
     const { page } = req.params;
     const userId = res.locals._id;
+    let newData = [];
 
-    const timeline = await userEntity.getTimeline(userId, +page);
+    const following = await followEntity.getFollowers(userId, +page);
 
-    const ids = timeline?.map((tweet) => {
-      return tweet._id?.toString();
-    });
+    if (following) {
+      const latestTweets = await Promise.all(
+        following.map((item) => {
+          return tweetEntity.getLatestTweet(item.follow.toString());
+        })
+      );
 
-    const liked = await likeEntity.findLikedTweets({
-      tweetId: { $in: ids },
-      userId: userId,
-    });
+      const ids = latestTweets.map((tweet) => {
+        return tweet._id?.toString();
+      });
 
-    console.log(timeline);
+      const liked = await likeEntity.findLikedTweets({
+        tweetId: { $in: ids },
+        userId: userId,
+      });
 
-    // let newData = [];
-
-    // timeline.forEach((tweet) => {
-    //   if (liked.length !== 0) {
-    //     liked.forEach((item) => {
-    //       if (item.tweetId.toString() === tweet._id.toString()) {
-    //         tweet.isLiked = true;
-    //         newData.push(tweet);
-    //       } else {
-    //         tweet.isLiked = false;
-    //         newData.push(tweet);
-    //       }
-    //     });
-    //   } else {
-    //     newData = timeline;
-    //   }
-    // });
+      latestTweets.forEach((tweet) => {
+        if (liked.length !== 0) {
+          liked.forEach((item) => {
+            if (item.tweetId.toString() === tweet._id.toString()) {
+              tweet.isLiked = true;
+              newData.push(tweet);
+            } else {
+              tweet.isLiked = false;
+              newData.push(tweet);
+            }
+          });
+        } else {
+          newData = latestTweets;
+        }
+      });
+    }
 
     res.status(200).json({
       status: "success",
-      data: newData || null,
+      data: newData,
     });
   } catch (err) {
-    console.log(err);
     next(err);
   }
 };

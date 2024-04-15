@@ -21,7 +21,6 @@ class FollowEntity extends BaseEntity {
         userId: userId,
         follow: userTo,
       });
-      await userEntity.addFollow(userId, userTo);
       return followDoc;
     } catch (err) {
       throw err;
@@ -33,7 +32,6 @@ class FollowEntity extends BaseEntity {
       await this.model.findOneAndDelete({
         $and: [{ userId }, { follow: userTo }],
       });
-      await userEntity.removeFollow(userId, userTo);
     } catch (err) {
       throw err;
     }

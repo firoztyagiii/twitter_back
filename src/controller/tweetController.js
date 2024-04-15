@@ -187,3 +187,17 @@ exports.postRepost = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.getReplies = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { page } = req.query;
+    const replies = await tweetEntity.getReplies(id, page || 1);
+    res.status(200).json({
+      status: "success",
+      data: replies,
+    });
+  } catch (err) {
+    next(err);
+  }
+};

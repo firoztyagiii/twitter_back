@@ -114,6 +114,28 @@ class TweetEntity extends BaseEntity {
       throw err;
     }
   }
+  async getReplies(tweetId, page) {
+    try {
+      const replies = await this.findMany(
+        {
+          originalTweet: tweetId,
+          type: "reply",
+        },
+        page,
+        {
+          path: "repliedBy",
+          select: "-password -email",
+        }
+      );
+
+      if (replies.length === 0) {
+        return [];
+      }
+      return replies;
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 const tweetEntity = new TweetEntity(TweetModel);
