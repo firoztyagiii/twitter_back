@@ -9,9 +9,10 @@ exports.protect = async (req, res, next) => {
     let token = "";
     if (req.headers.authorization) {
       token = req.headers.authorization.split(" ")[1];
-    } else if (req.cookies.token) {
-      token = req.cookies.token;
     }
+    // else if (req.cookies.token) {
+    //   token = req.cookies.token;
+    // }
     if (!token) {
       return next(new AppError("Token not found, you are not logged in", 401));
     }

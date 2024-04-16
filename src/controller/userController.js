@@ -48,11 +48,11 @@ exports.login = async (req, res, next) => {
 
     const token = await signToken(user);
 
-    res.cookie("token", token, {
-      expires: new Date(Date.now() + 1000 * 60 * 60),
-      httpOnly: true,
-      secure: false,
-    });
+    // res.cookie("token", token, {
+    //   expires: new Date(Date.now() + 1000 * 60 * 60),
+    //   httpOnly: true,
+    //   secure: false,
+    // });
 
     res.setHeader("Authorization", `Bearer ${token}`);
 

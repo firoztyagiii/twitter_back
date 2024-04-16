@@ -30,7 +30,7 @@ class TweetEntity extends BaseEntity {
   async findOne(query, projection = {}, options = {}) {
     try {
       const doc = await this.model.findOne(query).populate({
-        path: "user",
+        path: "user repliedBy",
         select: {
           password: false,
           email: false,
@@ -128,9 +128,10 @@ class TweetEntity extends BaseEntity {
         }
       );
 
-      if (replies.length === 0) {
+      if (!replies) {
         return [];
       }
+
       return replies;
     } catch (err) {
       throw err;
